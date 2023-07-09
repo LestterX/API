@@ -1,5 +1,6 @@
 import express from 'express';
-import {router} from './routes';
+import './shared/services/yupTranslations'; //Importa o arquivo de tradução do YUP || Tem que ser acima das rotas
+import { router } from './routes';
 import 'dotenv/config';
 
 const server = express();
