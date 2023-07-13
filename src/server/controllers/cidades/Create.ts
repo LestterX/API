@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middlewares';
+import { StatusCodes } from 'http-status-codes';
 
 interface ICidade {
   nome: string,
-  estado: string,
 }
 //yup.SchemaOf<ICidade> agora é yup.ObjectSchema<ICidade>
 //Serve para o YUP seguir as variáveis da interface, estando TIPADO também
@@ -34,9 +34,6 @@ interface ICidade {
 //   }
 // };
 
-interface IFilter {
-  filter?: string
-}
 // export const createFilterValidator: RequestHandler = async (req, res, next) => { //para não precisar TIPAR - Também pode usar nas rotas
 //   try {//Valida o req.body de acordo com o schema validatedData
 //     await queryValidation.validate(req.query, {//Add AWAIT
@@ -59,18 +56,15 @@ interface IFilter {
 
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema(yup.object({
+  body: getSchema<ICidade>(yup.object({
     nome: yup.string().required().min(3),
-    estado: yup.string().required().min(3),
-  })),
-  query: getSchema<IFilter>(yup.object({
-    filter: yup.string().required().min(3),
   })),
 }));
+
 
 // req: Request<{}, {}, ICidade> --> Está TIPANDO o REQ para com ICidade 
 // O mesmo que const data: ICidade = req.body
 export const create = async (req: Request<{}, {}, ICidade>, res: Response) => { //Add ASYNC
   //let validatedData: ICidade | undefined = undefined; //Cria uma variável que é igual a interface ICidade ou undefined
-  return res.send(req.body);
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não imprementado');
 };
