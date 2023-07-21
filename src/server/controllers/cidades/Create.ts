@@ -66,5 +66,7 @@ export const createValidation = validation((getSchema) => ({
 // O mesmo que const data: ICidade = req.body
 export const create = async (req: Request<{}, {}, ICidade>, res: Response) => { //Add ASYNC
   //let validatedData: ICidade | undefined = undefined; //Cria uma variável que é igual a interface ICidade ou undefined
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não imprementado');
+  console.log(req.body);
+  
+  return res.status(StatusCodes.CREATED).json(1);
 };
