@@ -2,15 +2,13 @@ import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middlewares';
 import { StatusCodes } from 'http-status-codes';
+import { ICidade } from '../../database/models';
 
-interface ICidade {
-  nome: string,
-}
-//yup.SchemaOf<ICidade> agora é yup.ObjectSchema<ICidade>
+//yup.SchemaOf<IBodyProps> agora é yup.ObjectSchema<IBodyProps>
 //Serve para o YUP seguir as variáveis da interface, estando TIPADO também
 //Não precisa utilizar object().shape({}); - Pode ser apenas object({});
 //Se na interface for obrigatório, no schema também tem que ser com .required()
-// const bodyValidation: yup.ObjectSchema<ICidade> = yup.object({
+// const bodyValidation: yup.ObjectSchema<IBodyProps> = yup.object({
 //   nome: yup.string().required().min(3),
 //   estado: yup.string().required().min(3),
 // });
@@ -54,19 +52,21 @@ interface ICidade {
 //   }
 // };
 
+//interface IBodyProps extends Omit<ICidade, 'id' | 'nome'> { }
+interface IBodyProps extends Omit<ICidade, 'id'> { } //Omit o ID e torna opcional
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<ICidade>(yup.object({
+  body: getSchema<IBodyProps>(yup.object({
     nome: yup.string().required().min(3),
   })),
 }));
 
 
-// req: Request<{}, {}, ICidade> --> Está TIPANDO o REQ para com ICidade 
-// O mesmo que const data: ICidade = req.body
-export const create = async (req: Request<{}, {}, ICidade>, res: Response) => { //Add ASYNC
-  //let validatedData: ICidade | undefined = undefined; //Cria uma variável que é igual a interface ICidade ou undefined
+// req: Request<{}, {}, IBodyProps> --> Está TIPANDO o REQ para com IBodyProps 
+// O mesmo que const data: IBodyProps = req.body
+export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => { //Add ASYNC
+  //let validatedData: IBodyProps | undefined = undefined; //Cria uma variável que é igual a interface IBodyProps ou undefined
   console.log(req.body);
-  
+
   return res.status(StatusCodes.CREATED).json(1);
 };
