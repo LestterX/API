@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { validation } from '../../shared/middlewares';
 import { StatusCodes } from 'http-status-codes';
 import { ICidade } from '../../database/models';
+import { CidadesProvider } from '../../database/providers/cidades';
 
 //yup.SchemaOf<IBodyProps> agora é yup.ObjectSchema<IBodyProps>
 //Serve para o YUP seguir as variáveis da interface, estando TIPADO também
@@ -57,7 +58,7 @@ interface IBodyProps extends Omit<ICidade, 'id'> { } //Omit o ID e torna opciona
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object({
-    nome: yup.string().required().min(3),
+    nome: yup.string().required().min(3).max(150),
   })),
 }));
 
@@ -67,6 +68,15 @@ export const createValidation = validation((getSchema) => ({
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => { //Add ASYNC
   //let validatedData: IBodyProps | undefined = undefined; //Cria uma variável que é igual a interface IBodyProps ou undefined
   console.log(req.body);
+  const result = await CidadesProvider.create(req.body);
 
-  return res.status(StatusCodes.CREATED).json(1);
+  if(result instanceof Error){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: {
+        default: result.message
+      }
+    });
+  }
+
+  return res.status(StatusCodes.CREATED).json(result);
 };
