@@ -45,6 +45,6 @@ describe('Cidades - UpdateById', () => {
       .send({ nome: 'Caxias' });
 
     expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(res1.body).toHaveProperty('errorsDefault.default');
+    expect(res1.body).toHaveProperty('errors.default');
   });
 });
