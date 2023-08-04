@@ -25,12 +25,16 @@ Isso para não ficar gerando as migrations o tempo todo enquanto estiver em modo
 Logo, para produção, IS_LOCAL_HOST=false e NODE_ENV=production
 */
 
-if(process.env.IS_LOCAL_HOST !== 'true'){
-  Knex.migrate.latest()
+if (process.env.IS_LOCAL_HOST !== 'true') {
+  Knex.migrate
+    .latest()
     .then(() => {
-      startServer();
+      Knex.seed.run() //Se der erro no deploy. Remover
+        .then(() => startServer())
+        .catch(console.log);
+      // startServer();
     })
     .catch(console.log);
-}else{
+} else {
   startServer();
 }
