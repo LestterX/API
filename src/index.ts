@@ -29,10 +29,9 @@ if (process.env.IS_LOCAL_HOST !== 'true') {
   Knex.migrate
     .latest()
     .then(() => {
-      Knex.seed.run() //Se der erro no deploy. Remover
+      Knex.seed.run()
         .then(() => startServer())
         .catch(console.log);
-      // startServer();
     })
     .catch(console.log);
 } else {

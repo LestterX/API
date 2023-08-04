@@ -4,7 +4,7 @@ import { Knex } from '../src/server/database/knex';
 
 beforeAll(async () => {
   await Knex.migrate.latest();
-  await Knex.seed.run(); //Remover se der erro nos testes automáticos
+  await Knex.seed.run();
 });
 
 afterAll(async () => {
